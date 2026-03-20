@@ -3,10 +3,30 @@
  * Contains all configuration constants and API endpoint definitions
  */
 
-// API Base URL - override in index.html by setting window.API_BASE_URL before this file loads.
-// Default to current origin so frontend and backend can be served together from the same host.
-const API_BASE_URL =
-  window.API_BASE_URL || window.VITE_API_BASE_URL || window.location.origin;
+// API Base URL resolution strategy:
+// 1) explicit window.API_BASE_URL override (recommended for deployments)
+// 2) same-origin in local/dev backend-served mode
+// 3) Render backend fallback for Vercel/static-hosted frontend
+const DEFAULT_BACKEND_URL = "https://double-entry-bank-go.onrender.com";
+
+function resolveAPIBaseURL() {
+  const explicit = (window.API_BASE_URL || "").trim();
+  if (explicit) {
+    return explicit;
+  }
+
+  const host = window.location.hostname;
+  const isVercelHost = host.endsWith(".vercel.app");
+  const isCustomFrontendDomain = host === "golangbank.app";
+
+  if (isVercelHost || isCustomFrontendDomain) {
+    return DEFAULT_BACKEND_URL;
+  }
+
+  return window.location.origin;
+}
+
+const API_BASE_URL = resolveAPIBaseURL();
 
 // API Endpoints
 const API_ENDPOINTS = {

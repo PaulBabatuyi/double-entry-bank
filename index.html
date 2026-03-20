@@ -264,11 +264,20 @@
     </div>
 
     <!-- Load JavaScript modules in dependency order -->
-    <!-- Set API base URL from environment (Vercel) or default to current origin -->
+    <!-- Set API base URL at runtime before config.js loads -->
     <script>
         if (typeof window.API_BASE_URL === 'undefined') {
-            // Check for Vercel environment variable (VITE_API_BASE_URL)
-            window.API_BASE_URL = (window.VITE_API_BASE_URL || '').trim() || window.location.origin;
+            const host = window.location.hostname;
+            const isVercelHost = host.endsWith('.vercel.app');
+            const isCustomFrontendDomain = host === 'golangbank.app';
+
+            // When frontend is hosted separately, point directly to Render backend.
+            if (isVercelHost || isCustomFrontendDomain) {
+                window.API_BASE_URL = 'https://double-entry-bank-go.onrender.com';
+            } else {
+                // Local/backend-served mode keeps same-origin API calls.
+                window.API_BASE_URL = window.location.origin;
+            }
         }
         console.log('API_BASE_URL configured to:', window.API_BASE_URL);
     </script>

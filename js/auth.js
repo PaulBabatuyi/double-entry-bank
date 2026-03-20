@@ -28,7 +28,7 @@ const auth = {
     try {
       const { response, data } = await api.login(email, password);
 
-      if (response.ok) {
+      if (response.ok && data && data.token) {
         state.setToken(data.token);
         state.setEmail(email);
 
@@ -66,7 +66,7 @@ const auth = {
     try {
       const { response, data } = await api.register(email, password);
 
-      if (response.ok) {
+      if (response.ok && data && data.token) {
         state.setToken(data.token);
         state.setEmail(data.email);
 

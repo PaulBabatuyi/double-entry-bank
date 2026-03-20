@@ -5,6 +5,10 @@
   "cleanUrls": true,
   "rewrites": [
     {
+      "source": "/swagger/:path*",
+      "destination": "https://double-entry-bank-go.onrender.com/swagger/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

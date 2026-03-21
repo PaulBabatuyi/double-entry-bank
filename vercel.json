@@ -6,11 +6,11 @@
   "rewrites": [
     {
       "source": "/swagger",
-      "destination": "https://double-entry-bank-go.onrender.com/swagger"
+      "destination": "https://double-entry-bank-go.onrender.com/swagger/index.html"
     },
     {
       "source": "/swagger/",
-      "destination": "https://double-entry-bank-go.onrender.com/swagger/"
+      "destination": "https://double-entry-bank-go.onrender.com/swagger/index.html"
     },
     {
       "source": "/swagger/:path*",

@@ -1,6 +1,6 @@
 # Frontend Demo - Double-Entry Bank Ledger
 
-Modern web interface for the banking ledger API built with vanilla JavaScript, Tailwind CSS, and Font Awesome, the focus is backend project repo not this frontend repo. check how to build a double-entry bank backend project and the tutorial here https://github.com/PaulBabatuyi/double-entry-bank-Go give some star
+Modern web interface for the banking ledger API built with vanilla JavaScript, Tailwind CSS, and Font Awesome, the focus is backend project repo not this frontend repo. check how to build a double-entry bank backend project and the tutorial here https://github.com/PaulBabatuyi/double-entry-bank-Go give a star
 
 ## Features
 

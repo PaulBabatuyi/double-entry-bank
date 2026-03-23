@@ -1,29 +1,35 @@
-# Frontend Demo - Double-Entry Bank Ledger
+# Frontend Demo — Double-Entry Bank Ledger
 
-Modern web interface for the banking ledger API built with vanilla JavaScript, Tailwind CSS, and Font Awesome, the focus is backend project repo not this frontend repo. check how to build a double-entry bank backend project and the tutorial here https://github.com/PaulBabatuyi/double-entry-bank-Go give a star
+**Backend API:** [double-entry-bank-Go](https://github.com/PaulBabatuyi/double-entry-bank-Go)
+
+A minimal web interface for the Go banking ledger API, built with vanilla JavaScript, Tailwind CSS, and Font Awesome. It exists to give readers a visual proof that the backend works — no build step, no framework, no tooling overhead.
+
+## Live Demo
+
+https://golangbank.app
 
 ## Features
 
-###  Modern UI
+### UI
 - Glassmorphism design with gradient backgrounds
 - Responsive layout (mobile & desktop)
 - Smooth animations and transitions
 - Toast notifications for user feedback
 
-###  Authentication
+### Authentication
 - User registration with email/password
 - Secure login with JWT tokens
 - Token persistence (localStorage)
 - Auto-logout on token expiration
 
-###  Banking Operations
+### Banking Operations
 - **Account Management**: Create and view multiple accounts
 - **Deposits**: Add funds to accounts
 - **Withdrawals**: Remove funds from accounts
 - **Transfers**: Move money between accounts
 - **Transaction History**: View all account entries
 
-###  Dashboard
+### Dashboard
 - Total accounts count
 - Combined balance across all accounts
 - Transaction counter
@@ -37,38 +43,41 @@ Modern web interface for the banking ledger API built with vanilla JavaScript, T
 - **Vanilla JavaScript**: No frameworks, pure ES6+
 - **Fetch API**: RESTful API communication
 
+> The frontend is intentionally minimal — vanilla JS with no build step — so readers of the FreeCodeCamp article can focus on the Go backend without frontend tooling getting in the way.
+
 ## File Structure
 
 ```
-frontend/
-├── index.html      # Main HTML structure
-├── styles.css      # Custom CSS (animations, effects)
-├── js/             # Modular JavaScript files
-│   ├── config.js   # Configuration and constants
-│   ├── state.js    # State management
-│   ├── api.js      # API service layer
-│   ├── auth.js     # Authentication logic
-│   ├── dashboard.js # Dashboard operations
+├── index.html          # Main HTML structure
+├── styles.css          # Custom CSS (animations, effects)
+├── js/
+│   ├── config.js       # Configuration and API endpoint constants
+│   ├── state.js        # State management
+│   ├── api.js          # API service layer
+│   ├── auth.js         # Authentication logic
+│   ├── dashboard.js    # Dashboard operations
 │   ├── transactions.js # Transaction handlers
-│   ├── ui.js       # UI helper functions
-│   ├── utils.js    # Utility functions
-│   └── main.js     # Application entry point
-└── README.md       # This file
+│   ├── ui.js           # UI helper functions
+│   ├── utils.js        # Utility functions
+│   └── main.js         # Application entry point
+└── README.md
 ```
 
 ## API Integration
 
-The frontend communicates with the Go backend using the same origin by default (for local and Render deployments):
+Communicates with the Go backend. By default, requests target `window.location.origin` so the frontend works with both local development and the deployed backend without any config changes.
 
 ### Endpoints Used
-- `POST /register` - Create new user
-- `POST /login` - Authenticate user
-- `GET /accounts` - List user accounts
-- `POST /accounts` - Create new account
-- `POST /accounts/{id}/deposit` - Deposit funds
-- `POST /accounts/{id}/withdraw` - Withdraw funds
-- `POST /transfers` - Transfer between accounts
-- `GET /accounts/{id}/entries` - Get transaction history
+- `POST /register` — Create new user
+- `POST /login` — Authenticate user
+- `GET /accounts` — List user accounts
+- `POST /accounts` — Create new account
+- `POST /accounts/{id}/deposit` — Deposit funds
+- `POST /accounts/{id}/withdraw` — Withdraw funds
+- `POST /transfers` — Transfer between accounts
+- `GET /accounts/{id}/entries` — Get transaction history
+
+You can override the backend URL by setting `window.API_BASE_URL` before `js/config.js` loads.
 
 ## State Management
 
@@ -82,33 +91,28 @@ currentUser = {
 
 ## Local Storage
 
-- `token`: JWT authentication token
-- `email`: User email for display
+- `token` — JWT authentication token
+- `email` — User email for display
 
 ## Development Notes
 
-### CORS Configuration
-CORS is required only when the frontend is served from a different origin than the backend (for example, frontend at `http://localhost:3000` and API at `http://localhost:8080`). When both frontend and backend are served from `http://localhost:8080`, CORS is not involved.
+### Running Locally
 
-### API Base URL
-By default, API requests target `window.location.origin`.
-You can override this by setting `window.API_BASE_URL` before `js/config.js` loads.
+This frontend is served as static files by the Go backend at `http://localhost:8080`. To run it locally:
+
+1. Start the Go backend (see [backend repo](https://github.com/PaulBabatuyi/double-entry-bank-Go))
+2. Navigate to `http://localhost:8080`
+3. Register a new user and start transacting
+
+No separate frontend server is needed.
+
+### CORS
+CORS is only relevant when the frontend is served from a different origin than the backend. When both run on `http://localhost:8080`, CORS is not involved.
 
 ### Security Considerations
-- Tokens stored in localStorage (consider httpOnly cookies for production)
-- No input sanitization (backend handles validation)
-- Password minimum length: 6 characters
-
-## Future Enhancements
-
-- [ ] Account reconciliation UI
-- [ ] Advanced transaction filtering and search
-- [ ] Export transaction history (CSV, PDF)
-- [ ] Multi-currency support display
-- [ ] Dark/light theme toggle
-- [ ] Transaction analytics charts (Chart.js)
-- [ ] Notification preferences
-- [ ] Two-factor authentication UI
+- Tokens are stored in localStorage (consider httpOnly cookies for a production auth system)
+- Input sanitization is handled by the backend API
+- Password minimum length is enforced by the backend API: 6 characters
 
 ## Browser Support
 
@@ -120,9 +124,10 @@ Tested on:
 
 Requires ES6+ support (modern browsers only).
 
-## Quick Start
+## Future Enhancements
 
-1. Start the Go backend server
-2. Navigate to http://localhost:8080
-3. Register a new account
-4. Create accounts and start transacting!
+- [ ] Account reconciliation UI
+- [ ] Advanced transaction filtering and search
+- [ ] Export transaction history (CSV, PDF)
+- [ ] Dark/light theme toggle
+- [ ] Transaction analytics charts (Chart.js)

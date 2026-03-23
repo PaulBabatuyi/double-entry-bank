@@ -37,6 +37,14 @@
       "destination": "https://double-entry-bank-go.onrender.com/swagger/:path*"
     },
     {
+      "source": "/health",
+      "destination": "https://double-entry-bank-go.onrender.com/health"
+    },
+    {
+      "source": "/health/",
+      "destination": "https://double-entry-bank-go.onrender.com/health"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

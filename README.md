@@ -1,133 +1,188 @@
-# Frontend Demo — Double-Entry Bank Ledger
-
-**Backend API:** [double-entry-bank-Go](https://github.com/PaulBabatuyi/double-entry-bank-Go)
-
-A minimal web interface for the Go banking ledger API, built with vanilla JavaScript, Tailwind CSS, and Font Awesome. It exists to give readers a visual proof that the backend works — no build step, no framework, no tooling overhead.
+# Double-Entry Bank - Next.js Frontend
 
 ## Live Demo
-
 https://golangbank.app
 
-## Features
+**Backend API: swagger** [double-entry-bank-Go](https://github.com/PaulBabatuyi/double-entry-bank-Go/swagger/index.html) 
 
-### UI
-- Glassmorphism design with gradient backgrounds
-- Responsive layout (mobile & desktop)
-- Smooth animations and transitions
-- Toast notifications for user feedback
+## Quick Start
 
-### Authentication
-- User registration with email/password
-- Secure login with JWT tokens
-- Token persistence (localStorage)
-- Auto-logout on token expiration
+### 1. Install Dependencies
 
-### Banking Operations
-- **Account Management**: Create and view multiple accounts
-- **Deposits**: Add funds to accounts
-- **Withdrawals**: Remove funds from accounts
-- **Transfers**: Move money between accounts
-- **Transaction History**: View all account entries
+```bash
+yarn install
+```
 
-### Dashboard
-- Total accounts count
-- Combined balance across all accounts
-- Transaction counter
-- Real-time updates after operations
+### 2. Configure Environment
 
-## Technology Stack
+Copy the example env file and update with your API URL:
 
-- **HTML5**: Semantic markup
-- **Tailwind CSS** (CDN): Utility-first styling
-- **Font Awesome** (CDN): Icons
-- **Vanilla JavaScript**: No frameworks, pure ES6+
-- **Fetch API**: RESTful API communication
+```bash
+cp .env.local.example .env.local
+```
 
-> The frontend is intentionally minimal — vanilla JS with no build step — so readers of the FreeCodeCamp article can focus on the Go backend without frontend tooling getting in the way.
-
-## File Structure
+For local development (backend on localhost:8080):
+```
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
+```
 
 ```
-├── index.html          # Main HTML structure
-├── styles.css          # Custom CSS (animations, effects)
-├── js/
-│   ├── config.js       # Configuration and API endpoint constants
-│   ├── state.js        # State management
-│   ├── api.js          # API service layer
-│   ├── auth.js         # Authentication logic
-│   ├── dashboard.js    # Dashboard operations
-│   ├── transactions.js # Transaction handlers
-│   ├── ui.js           # UI helper functions
-│   ├── utils.js        # Utility functions
-│   └── main.js         # Application entry point
-└── README.md
+
+### 3. Run Development Server
+
+```bash
+yarn dev
 ```
+
+Open [http://localhost:3000](http://localhost:3000) to view the app.
+
+## Dashboard Preview
+
+The dashboard provides a comprehensive interface for managing multiple bank accounts with real-time transaction tracking:
+
+![Frontend Dashboard](public/dashboard-preview.png)
+
+**Key Features:**
+- View total accounts, balance, and transaction count at a glance
+- Manage multiple accounts with detailed balance information
+- Perform deposits, withdrawals, and transfers instantly
+- Track transaction history with all account activities
+- Intuitive UI with real-time updates
+
+## API Documentation
+
+The backend API is fully documented with Swagger/OpenAPI. All endpoints are RESTful and support double-entry accounting:
+
+![Swagger API Documentation](public/swagger-api.png)
+
+**Main Endpoint Categories:**
+- `/accounts` - Manage bank accounts
+- `/auth` - User authentication (login/register)
+- `/transfers` - Transfer funds between accounts
+
+## Scripts
+
+- `yarn dev` - Start development server (watches for changes)
+- `yarn build` - Build for production
+- `yarn start` - Start production server
+- `yarn lint` - Run ESLint to check code quality
+- `yarn type-check` - Run TypeScript type checking
+
+## Project Structure
+
+```
+app/
+  ├── auth/
+  │   └── page.tsx          # Login/Register page
+  ├── dashboard/
+  │   └── page.tsx          # Main dashboard
+  ├── globals.css           # Global styles + animations
+  ├── layout.tsx            # Root layout + providers
+  └── page.tsx              # Redirect to auth/dashboard
+
+components/
+  ├── Toast.tsx             # Toast notification component
+  ├── Providers.tsx         # Client-side providers
+  └── dashboard/
+      ├── Header.tsx        # Navigation header
+      ├── DashboardStats.tsx
+      ├── AccountsList.tsx
+      ├── TransactionHistory.tsx
+      ├── CreateAccountModal.tsx
+      ├── DepositForm.tsx
+      ├── WithdrawForm.tsx
+      └── TransferForm.tsx
+
+lib/
+  ├── api.ts                # API client (fetch wrapper)
+  ├── config.ts             # Configuration & constants
+  ├── utils.ts              # Utility functions
+  ├── types/
+  │   └── index.ts          # TypeScript interfaces
+  └── store/
+      ├── authStore.ts      # Auth state (Zustand)
+      └── toastStore.ts     # Toast state (Zustand)
+
+middleware.ts              # Auth redirect middleware
+```
+
+## Key Changes from Original
+
+### State Management
+- **Before**: Global JavaScript objects (`state`, `auth`, `ui`)
+- **After**: Zustand stores + React Context (Providers.tsx)
+
+### Routing & Navigation
+- **Before**: Single-page app with manual show/hide
+- **After**: Next.js App Router with proper route layout groups
+
+### UI Components
+- **Before**: Imperative DOM manipulation with `createElement`
+- **After**: React components with JSX
+
+### Type Safety
+- **Before**: Vanilla JS with no type checking
+- **After**: Full TypeScript with strict mode
+
+### API Layer
+- **Before**: Global `api` object with hardcoded endpoints
+- **After**: Modular `lib/api.ts` functions, all typed
+
+### Environment Configuration
+- **Before**: Hard-coded URL resolution in config.js
+- **After**: Environment variable `NEXT_PUBLIC_API_BASE_URL`
+
+## Authentication Flow
+
+1. User lands on `/` → Providers hydrate auth state from localStorage
+2. If token exists → redirect to `/dashboard`
+3. If not → redirect to `/auth`
+4. User logs in/registers → token saved to localStorage + Zustand store
+5. Middleware intercepts routes and ensures auth state
 
 ## API Integration
 
-Communicates with the Go backend. By default, requests target `window.location.origin` so the frontend works with both local development and the deployed backend without any config changes.
+All API calls go through `lib/api.ts`:
 
-### Endpoints Used
-- `POST /register` — Create new user
-- `POST /login` — Authenticate user
-- `GET /accounts` — List user accounts
-- `POST /accounts` — Create new account
-- `POST /accounts/{id}/deposit` — Deposit funds
-- `POST /accounts/{id}/withdraw` — Withdraw funds
-- `POST /transfers` — Transfer between accounts
-- `GET /accounts/{id}/entries` — Get transaction history
+```typescript
+import { login, register, deposit, withdraw, transfer } from "@/lib/api";
 
-You can override the backend URL by setting `window.API_BASE_URL` before `js/config.js` loads.
-
-## State Management
-
-```javascript
-currentUser = {
-    email: '',      // User email
-    token: '',      // JWT token
-    accounts: []    // Array of account objects
-}
+const { response, data } = await login(email, password);
 ```
 
-## Local Storage
+The API client automatically:
+- Adds Bearer token to headers
+- Handles 401 errors (logs out user)
+- Parses JSON responses
 
-- `token` — JWT authentication token
-- `email` — User email for display
+**For comprehensive API documentation**, visit the Swagger UI at your backend instance (e.g., `http://localhost:8080/swagger/index.html`)
 
-## Development Notes
+## Deployment to Vercel
 
-### Running Locally
+1. Push code to GitHub
+2. Connect repo to Vercel
+3. Set environment variable: `NEXT_PUBLIC_API_BASE_URL=....`
+4. Deploy
 
-This frontend is served as static files by the Go backend at `http://localhost:8080`. To run it locally:
+## Troubleshooting
 
-1. Start the Go backend (see [backend repo](https://github.com/PaulBabatuyi/double-entry-bank-Go))
-2. Navigate to `http://localhost:8080`
-3. Register a new user and start transacting
+### Build fails with TypeScript errors
+```bash
+yarn type-check
+```
 
-No separate frontend server is needed.
+### API calls fail (CORS or 404)
+- Check `NEXT_PUBLIC_API_BASE_URL` matches backend URL
+- Ensure backend is running and accessible
 
-### CORS
-CORS is only relevant when the frontend is served from a different origin than the backend. When both run on `http://localhost:8080`, CORS is not involved.
+### Tokens not persisting across refreshes
+- Browser localStorage must be enabled
+- Check that Providers component is rendered
 
-### Security Considerations
-- Tokens are stored in localStorage (consider httpOnly cookies for a production auth system)
-- Input sanitization is handled by the backend API
-- Password minimum length is enforced by the backend API: 6 characters
+## Further Enhancements
 
-## Browser Support
-
-Tested on:
-- ✅ Chrome 90+
-- ✅ Firefox 88+
-- ✅ Safari 14+
-- ✅ Edge 90+
-
-Requires ES6+ support (modern browsers only).
-
-## Future Enhancements
-
-- [ ] Account reconciliation UI
-- [ ] Advanced transaction filtering and search
-- [ ] Export transaction history (CSV, PDF)
+- [ ] React Query/SWR for automatic cache invalidation
+- [ ] Server-side auth with cookies (httpOnly)
+- [ ] Advanced transaction filtering
 - [ ] Dark/light theme toggle
-- [ ] Transaction analytics charts (Chart.js)
+- [ ] Performance optimization with React Suspense

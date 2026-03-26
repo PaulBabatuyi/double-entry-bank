@@ -109,35 +109,41 @@ export default function AuthPage() {
   return (
     <>
       {/* Header */}
-      <header className="bg-black/30 backdrop-blur-lg border-b border-white/10">
-        <div className="container mx-auto px-6 py-4 flex items-center space-x-3">
-          <i className="fas fa-university text-3xl text-purple-400"></i>
-          <div>
-            <h1 className="text-xl font-bold">Double-Entry Ledger</h1>
-            <p className="text-xs text-gray-400">Fintech Backend in Go</p>
+      <header className="bg-black/30 backdrop-blur-lg border-b border-white/10 sticky top-0 z-50">
+        <div className="container mx-auto px-4 md:px-6 py-3 md:py-4 flex items-center space-x-2 md:space-x-3">
+          <i className="fas fa-university text-2xl md:text-3xl text-purple-400 flex-shrink-0"></i>
+          <div className="min-w-0">
+            <h1 className="text-lg md:text-xl font-bold truncate">
+              Double-Entry Ledger
+            </h1>
+            <p className="text-xs text-gray-400 hidden sm:block">
+              Fintech Backend in Go
+            </p>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <div className="container mx-auto px-6 py-12 max-w-md flex-1">
-        <div className="glass rounded-2xl shadow-2xl p-8 border border-white/20">
-          <div className="text-center mb-8">
-            <i className="fas fa-university text-5xl text-purple-400 mb-4"></i>
-            <h2 className="text-2xl font-bold mb-2">Banking Ledger System</h2>
-            <p className="text-gray-300 text-sm">
+      <div className="container mx-auto px-4 md:px-6 py-8 md:py-12 max-w-md flex-1">
+        <div className="glass rounded-2xl shadow-2xl p-6 md:p-8 border border-white/20">
+          <div className="text-center mb-6 md:mb-8">
+            <i className="fas fa-university text-4xl md:text-5xl text-purple-400 mb-3 md:mb-4"></i>
+            <h2 className="text-xl md:text-2xl font-bold mb-2">
+              Banking Ledger System
+            </h2>
+            <p className="text-gray-300 text-xs md:text-sm">
               Production-grade double-entry bookkeeping
             </p>
           </div>
 
           {/* Auth Tabs */}
-          <div className="flex space-x-4 mb-6">
+          <div className="flex space-x-2 md:space-x-4 mb-5 md:mb-6">
             <button
               onClick={() => {
                 setActiveTab("login");
                 setAuthMessage("");
               }}
-              className={`flex-1 py-2 rounded-lg font-semibold transition ${
+              className={`flex-1 py-2 md:py-2 rounded-lg font-semibold text-sm md:text-base transition ${
                 activeTab === "login" ? "auth-tab-active" : "auth-tab-inactive"
               }`}
             >
@@ -148,7 +154,7 @@ export default function AuthPage() {
                 setActiveTab("register");
                 setAuthMessage("");
               }}
-              className={`flex-1 py-2 rounded-lg font-semibold transition ${
+              className={`flex-1 py-2 md:py-2 rounded-lg font-semibold text-sm md:text-base transition ${
                 activeTab === "register"
                   ? "auth-tab-active"
                   : "auth-tab-inactive"
@@ -160,20 +166,22 @@ export default function AuthPage() {
 
           {/* Login Form */}
           {activeTab === "login" && (
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-3 md:space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Email</label>
+                <label className="block text-xs md:text-sm font-medium mb-2">
+                  Email
+                </label>
                 <input
                   type="email"
                   name="email"
                   required
                   disabled={isLoading}
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none text-white placeholder-gray-500 disabled:opacity-50"
+                  className="w-full px-3 md:px-4 py-2 md:py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none text-sm md:text-base text-white placeholder-gray-500 disabled:opacity-50 transition"
                   placeholder="user@example.com"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-xs md:text-sm font-medium mb-2">
                   Password
                 </label>
                 <input
@@ -181,14 +189,14 @@ export default function AuthPage() {
                   name="password"
                   required
                   disabled={isLoading}
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none text-white placeholder-gray-500 disabled:opacity-50"
+                  className="w-full px-3 md:px-4 py-2 md:py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none text-sm md:text-base text-white placeholder-gray-500 disabled:opacity-50 transition"
                   placeholder="••••••••"
                 />
               </div>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 py-3 rounded-lg font-semibold transition shadow-lg disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base transition shadow-lg disabled:opacity-50"
               >
                 {isLoading ? (
                   <span className="inline-block">
@@ -197,7 +205,8 @@ export default function AuthPage() {
                   </span>
                 ) : (
                   <>
-                    <i className="fas fa-sign-in-alt mr-2"></i>Login
+                    <i className="fas fa-sign-in-alt mr-2 hidden sm:inline"></i>
+                    Login
                   </>
                 )}
               </button>
@@ -206,20 +215,22 @@ export default function AuthPage() {
 
           {/* Register Form */}
           {activeTab === "register" && (
-            <form onSubmit={handleRegister} className="space-y-4">
+            <form onSubmit={handleRegister} className="space-y-3 md:space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Email</label>
+                <label className="block text-xs md:text-sm font-medium mb-2">
+                  Email
+                </label>
                 <input
                   type="email"
                   name="register-email"
                   required
                   disabled={isLoading}
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none text-white placeholder-gray-500 disabled:opacity-50"
+                  className="w-full px-3 md:px-4 py-2 md:py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none text-sm md:text-base text-white placeholder-gray-500 disabled:opacity-50 transition"
                   placeholder="user@example.com"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-xs md:text-sm font-medium mb-2">
                   Password
                 </label>
                 <input
@@ -228,7 +239,7 @@ export default function AuthPage() {
                   required
                   minLength={6}
                   disabled={isLoading}
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none text-white placeholder-gray-500 disabled:opacity-50"
+                  className="w-full px-3 md:px-4 py-2 md:py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none text-sm md:text-base text-white placeholder-gray-500 disabled:opacity-50 transition"
                   placeholder="••••••••"
                 />
                 <p className="text-xs text-gray-400 mt-1">
@@ -238,7 +249,7 @@ export default function AuthPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 py-3 rounded-lg font-semibold transition shadow-lg disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base transition shadow-lg disabled:opacity-50"
               >
                 {isLoading ? (
                   <span className="inline-block">
@@ -247,7 +258,8 @@ export default function AuthPage() {
                   </span>
                 ) : (
                   <>
-                    <i className="fas fa-user-plus mr-2"></i>Create Account
+                    <i className="fas fa-user-plus mr-2 hidden sm:inline"></i>
+                    Create Account
                   </>
                 )}
               </button>
@@ -255,42 +267,64 @@ export default function AuthPage() {
           )}
 
           {authMessage && (
-            <div className="mt-4 p-3 rounded-lg text-sm text-center bg-red-500/20 border border-red-500/50 text-red-200">
+            <div className="mt-4 p-3 rounded-lg text-xs md:text-sm text-center bg-red-500/20 border border-red-500/50 text-red-200">
               {authMessage}
             </div>
           )}
         </div>
 
         {/* Tech Stack Info */}
-        <div className="mt-8 text-center text-sm text-gray-400">
+        <div className="mt-6 md:mt-8 text-center text-xs md:text-sm text-gray-400">
           <p className="mb-2">🚀 Built with Go, PostgreSQL, SQLC & JWT</p>
-          <p>Double-entry bookkeeping • Atomic transactions • Audit trail</p>
+          <p className="px-2">
+            Double-entry bookkeeping • Atomic transactions • Audit trail
+          </p>
         </div>
       </div>
 
       {/* Footer */}
-      <footer className="container mx-auto px-6 py-8 text-center text-sm text-gray-300 border-t border-white/10">
-        <p>
-          Learn the backend API in Swagger:
-          <a
-            href={`${getAPIBaseURL()}/swagger/index.html`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-300 hover:text-blue-200 underline ml-2"
-          >
-            Open API Docs
-          </a>
-        </p>
-        <p className="mt-2 text-gray-500">
-          <a
-            href={`${getAPIBaseURL()}/health`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-400 hover:text-gray-300 underline"
-          >
-            Health Check
-          </a>
-        </p>
+      <footer className="container mx-auto px-4 md:px-6 py-6 md:py-8 text-center text-xs md:text-sm text-gray-300 border-t border-white/10">
+        <div className="space-y-3">
+          {/* API Links */}
+          <p className="break-words">
+            Learn the backend API in Swagger:
+            <a
+              href={`${getAPIBaseURL()}/swagger/index.html`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-300 hover:text-blue-200 underline ml-1 md:ml-2 inline-block"
+            >
+              Open API Docs
+            </a>
+            <span className="text-gray-600"> • </span>
+            <a
+              href={`${getAPIBaseURL()}/health`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-green-300 hover:text-green-200 underline"
+            >
+              Health Check
+            </a>
+          </p>
+
+          {/* GitHub Link */}
+          <p>
+            <a
+              href="https://github.com/paulbabatuyi/double-entry-bank"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-2 text-gray-300 hover:text-white transition group"
+            >
+              <i className="fab fa-github text-lg group-hover:scale-110 transition"></i>
+              <span>View on GitHub</span>
+            </a>
+          </p>
+
+          {/* Copyright */}
+          <p className="text-gray-500 text-xs">
+            © {new Date().getFullYear()} Paul Babatuyi. All rights reserved.
+          </p>
+        </div>
       </footer>
     </>
   );

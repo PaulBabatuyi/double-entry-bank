@@ -57,16 +57,16 @@ export function DepositForm({ onSuccess }: DepositFormProps) {
   };
 
   return (
-    <div className="glass rounded-xl p-6 border border-white/20">
-      <h3 className="text-lg font-bold mb-4 text-green-400">
+    <div className="glass rounded-xl p-4 md:p-6 border border-white/20">
+      <h3 className="text-base md:text-lg font-bold mb-3 md:mb-4 text-green-400">
         <i className="fas fa-arrow-down mr-2"></i>Deposit
       </h3>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
         <select
           name="account"
           required
           disabled={isLoading}
-          className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-green-500 focus:outline-none text-white disabled:opacity-50"
+          className="w-full px-3 md:px-4 py-2 md:py-3 rounded-lg bg-white/5 border border-white/10 focus:border-green-500 focus:outline-none text-sm md:text-base text-white disabled:opacity-50 transition"
         >
           <option value="">Select Account</option>
           {accounts.map((acc) => (
@@ -82,13 +82,13 @@ export function DepositForm({ onSuccess }: DepositFormProps) {
           min="0.01"
           step="0.01"
           disabled={isLoading}
-          className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-green-500 focus:outline-none text-white placeholder-gray-500 disabled:opacity-50"
+          className="w-full px-3 md:px-4 py-2 md:py-3 rounded-lg bg-white/5 border border-white/10 focus:border-green-500 focus:outline-none text-sm md:text-base text-white placeholder-gray-500 disabled:opacity-50 transition"
           placeholder="Amount ($)"
         />
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-green-500 hover:bg-green-600 py-3 rounded-lg font-semibold transition disabled:opacity-50"
+          className="w-full bg-green-500 hover:bg-green-600 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base transition disabled:opacity-50"
         >
           {isLoading ? "Processing..." : "Deposit Funds"}
         </button>

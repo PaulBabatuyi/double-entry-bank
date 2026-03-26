@@ -12,10 +12,29 @@
   --font-mono: var(--font-geist-mono);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Better text rendering for dates and small text */
+.text-xs, .text-sm {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.02em;
+}
+
+.font-mono {
+  -webkit-font-smoothing: auto;
+  font-feature-settings: "zero" 1;
 }
 
 /* Custom styles and animations */
@@ -77,6 +96,17 @@ input:focus, select:focus {
 
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(168, 85, 247, 0.7);
+}
+
+/* Mobile-first responsive container padding */
+@media (max-width: 640px) {
+  body {
+    font-size: 14px;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.01em;
+  }
 }
 
 /* Account card hover effect */

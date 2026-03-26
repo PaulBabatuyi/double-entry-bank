@@ -1,188 +1,236 @@
-# Double-Entry Bank - Next.js Frontend
+# Double-Entry Bank — Next.js Frontend
 
-## Live Demo
-https://golangbank.app
+A production-ready Next.js frontend for the [Double-Entry Bank Ledger API](https://github.com/PaulBabatuyi/double-entry-bank-Go). Built with TypeScript, Zustand, and Tailwind CSS v4.
 
-**Backend API: swagger** [double-entry-bank-Go](https://github.com/PaulBabatuyi/double-entry-bank-Go/swagger/index.html) 
+**Live demo:** https://golangbank.app  
+**Backend repo:** https://github.com/PaulBabatuyi/double-entry-bank-Go  
+**API docs (Swagger):** https://golangbank.app/swagger/index.html
 
-## Quick Start
+![Dashboard preview](public/dashboard-preview.png)
 
-### 1. Install Dependencies
+---
+
+## Overview
+
+This frontend is intentionally kept simple — the focus of the overall project is the Go backend. The UI provides a working interface to exercise every backend endpoint: registration, login, account management, deposits, withdrawals, transfers, transaction history, and ledger reconciliation.
+
+It was converted from a vanilla JavaScript single-page app into a typed, component-based Next.js application. The architecture reflects real patterns used in production frontends while keeping the code straightforward enough to serve as a learning reference alongside the backend.
+
+---
+
+## Tech Stack
+
+| Concern | Library |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript 5 (strict mode) |
+| State management | Zustand 4 |
+| Styling | Tailwind CSS v4 |
+| Icons | Font Awesome 6 |
+| Linting | ESLint 9 + typescript-eslint |
+| Package manager | Yarn 1 |
+
+---
+
+## Features
+
+- **Authentication** — register and login with JWT, token persisted in `localStorage` and synced to a cookie for middleware-level route protection
+- **Dashboard** — live summary of total accounts, combined balance, and transaction count
+- **Account management** — create named accounts, view per-account balances
+- **Transactions** — deposit, withdraw, and transfer between accounts with instant UI feedback
+- **Transaction history** — paginated ledger entries per account showing debits and credits
+- **Reconciliation** — trigger a backend balance check to verify stored balance matches ledger entries
+- **Toast notifications** — success and error feedback on every operation
+- **API proxy** — all requests are routed through Next.js rewrites, so the backend URL never leaks to the browser and CORS is handled server-side
+
+---
+
+## Project Structure
+
+```
+.
+├── app/
+│   ├── auth/
+│   │   └── page.tsx          # Login / register
+│   ├── dashboard/
+│   │   └── page.tsx          # Main dashboard
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx              # Root redirect
+│
+├── components/
+│   ├── Toast.tsx
+│   ├── Providers.tsx         # Auth hydration on mount
+│   └── dashboard/
+│       ├── Header.tsx
+│       ├── DashboardStats.tsx
+│       ├── AccountsList.tsx
+│       ├── TransactionHistory.tsx
+│       ├── CreateAccountModal.tsx
+│       ├── DepositForm.tsx
+│       ├── WithdrawForm.tsx
+│       └── TransferForm.tsx
+│
+├── lib/
+│   ├── api.ts                # Typed fetch wrapper for all endpoints
+│   ├── config.ts             # API base URL resolution + constants
+│   ├── utils.ts              # Currency formatting, date formatting, helpers
+│   ├── types/
+│   │   └── index.ts          # Shared TypeScript interfaces
+│   └── store/
+│       ├── authStore.ts      # Auth state (Zustand)
+│       └── toastStore.ts     # Toast notification state (Zustand)
+│
+├── middleware.ts             # Auth redirect middleware
+├── next.config.ts            # API rewrites
+└── public/
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- Yarn 1.x (`npm install -g yarn`)
+- A running instance of the [Go backend](https://github.com/PaulBabatuyi/double-entry-bank-Go)
+
+### 1. Install dependencies
 
 ```bash
 yarn install
 ```
 
-### 2. Configure Environment
-
-Copy the example env file and update with your API URL:
+### 2. Configure environment
 
 ```bash
 cp .env.local.example .env.local
 ```
 
-For local development (backend on localhost:8080):
-```
+Edit `.env.local` and set the backend URL:
+
+```env
+# Local backend
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
+
+# Or point at the hosted instance
+NEXT_PUBLIC_API_BASE_URL=https://double-entry-bank-go.onrender.com
 ```
 
-```
-
-### 3. Run Development Server
+### 3. Run the development server
 
 ```bash
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the app.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Dashboard Preview
+---
 
-The dashboard provides a comprehensive interface for managing multiple bank accounts with real-time transaction tracking:
+## Available Scripts
 
-![Frontend Dashboard](public/dashboard-preview.png)
+| Command | Description |
+|---|---|
+| `yarn dev` | Start development server with hot reload |
+| `yarn build` | Production build |
+| `yarn start` | Start production server |
+| `yarn lint` | Run ESLint |
+| `yarn type-check` | Run TypeScript compiler check without emitting |
 
-**Key Features:**
-- View total accounts, balance, and transaction count at a glance
-- Manage multiple accounts with detailed balance information
-- Perform deposits, withdrawals, and transfers instantly
-- Track transaction history with all account activities
-- Intuitive UI with real-time updates
+---
 
-## API Documentation
+## How API Calls Work
 
-The backend API is fully documented with Swagger/OpenAPI. All endpoints are RESTful and support double-entry accounting:
+All HTTP calls go through `lib/api.ts`, which wraps `fetch` with:
 
-![Swagger API Documentation](public/swagger-api.png)
+- Automatic `Authorization: Bearer <token>` header injection from `localStorage`
+- `401` handling — clears the stored token and fires an `auth:logout` event that `Providers.tsx` listens to
+- JSON parsing with graceful fallback for non-JSON responses
 
-**Main Endpoint Categories:**
-- `/accounts` - Manage bank accounts
-- `/auth` - User authentication (login/register)
-- `/transfers` - Transfer funds between accounts
+The Next.js rewrite config in `next.config.ts` proxies every backend path (`/register`, `/login`, `/accounts/*`, `/transfers`, etc.) to `NEXT_PUBLIC_API_BASE_URL`. This means the browser always talks to the same origin, and you never need to configure CORS on the backend for local development.
 
-## Scripts
+Example:
 
-- `yarn dev` - Start development server (watches for changes)
-- `yarn build` - Build for production
-- `yarn start` - Start production server
-- `yarn lint` - Run ESLint to check code quality
-- `yarn type-check` - Run TypeScript type checking
+```typescript
+import { deposit } from "@/lib/api";
 
-## Project Structure
+const { response, data } = await deposit(accountId, 250.00);
 
-```
-app/
-  ├── auth/
-  │   └── page.tsx          # Login/Register page
-  ├── dashboard/
-  │   └── page.tsx          # Main dashboard
-  ├── globals.css           # Global styles + animations
-  ├── layout.tsx            # Root layout + providers
-  └── page.tsx              # Redirect to auth/dashboard
-
-components/
-  ├── Toast.tsx             # Toast notification component
-  ├── Providers.tsx         # Client-side providers
-  └── dashboard/
-      ├── Header.tsx        # Navigation header
-      ├── DashboardStats.tsx
-      ├── AccountsList.tsx
-      ├── TransactionHistory.tsx
-      ├── CreateAccountModal.tsx
-      ├── DepositForm.tsx
-      ├── WithdrawForm.tsx
-      └── TransferForm.tsx
-
-lib/
-  ├── api.ts                # API client (fetch wrapper)
-  ├── config.ts             # Configuration & constants
-  ├── utils.ts              # Utility functions
-  ├── types/
-  │   └── index.ts          # TypeScript interfaces
-  └── store/
-      ├── authStore.ts      # Auth state (Zustand)
-      └── toastStore.ts     # Toast state (Zustand)
-
-middleware.ts              # Auth redirect middleware
+if (response.ok) {
+  // data is typed as MessageResponse
+}
 ```
 
-## Key Changes from Original
+---
 
-### State Management
-- **Before**: Global JavaScript objects (`state`, `auth`, `ui`)
-- **After**: Zustand stores + React Context (Providers.tsx)
+## State Management
 
-### Routing & Navigation
-- **Before**: Single-page app with manual show/hide
-- **After**: Next.js App Router with proper route layout groups
+Two Zustand stores handle all client state:
 
-### UI Components
-- **Before**: Imperative DOM manipulation with `createElement`
-- **After**: React components with JSX
+**`authStore`** — holds the current user (email + JWT), the accounts list, and a hydration flag. Persists token and email to `localStorage` on write and reads them back on mount via the `hydrate()` action called in `Providers.tsx`.
 
-### Type Safety
-- **Before**: Vanilla JS with no type checking
-- **After**: Full TypeScript with strict mode
+**`toastStore`** — manages a queue of toast notifications. Each toast auto-dismisses after 4 seconds (configurable via `TOAST_DURATION` in `lib/config.ts`).
 
-### API Layer
-- **Before**: Global `api` object with hardcoded endpoints
-- **After**: Modular `lib/api.ts` functions, all typed
-
-### Environment Configuration
-- **Before**: Hard-coded URL resolution in config.js
-- **After**: Environment variable `NEXT_PUBLIC_API_BASE_URL`
+---
 
 ## Authentication Flow
 
-1. User lands on `/` → Providers hydrate auth state from localStorage
-2. If token exists → redirect to `/dashboard`
-3. If not → redirect to `/auth`
-4. User logs in/registers → token saved to localStorage + Zustand store
-5. Middleware intercepts routes and ensures auth state
-
-## API Integration
-
-All API calls go through `lib/api.ts`:
-
-```typescript
-import { login, register, deposit, withdraw, transfer } from "@/lib/api";
-
-const { response, data } = await login(email, password);
+```
+User visits /
+    │
+    ▼
+Providers mounts → hydrate() reads localStorage
+    │
+    ├─ Token found  → redirect to /dashboard
+    └─ No token     → redirect to /auth
+                            │
+                    User logs in / registers
+                            │
+                    Token saved → redirect to /dashboard
+                            │
+                    401 on any request
+                            │
+                    Token cleared → auth:logout event → redirect to /auth
 ```
 
-The API client automatically:
-- Adds Bearer token to headers
-- Handles 401 errors (logs out user)
-- Parses JSON responses
+Route protection is enforced in two places: `middleware.ts` checks the `token` cookie server-side on every navigation, and `dashboard/page.tsx` checks the Zustand store client-side as a fallback.
 
-**For comprehensive API documentation**, visit the Swagger UI at your backend instance (e.g., `http://localhost:8080/swagger/index.html`)
+---
 
-## Deployment to Vercel
+## Deployment
 
-1. Push code to GitHub
-2. Connect repo to Vercel
-3. Set environment variable: `NEXT_PUBLIC_API_BASE_URL=....`
+### Vercel (recommended)
+
+1. Push to GitHub
+2. Import the repo in Vercel
+3. Add the environment variable:
+   ```
+   NEXT_PUBLIC_API_BASE_URL=https://your-backend-url.com
+   ```
 4. Deploy
 
-## Troubleshooting
+No other configuration is required. The Next.js rewrites handle routing at the Edge.
 
-### Build fails with TypeScript errors
-```bash
-yarn type-check
-```
+### Other platforms
 
-### API calls fail (CORS or 404)
-- Check `NEXT_PUBLIC_API_BASE_URL` matches backend URL
-- Ensure backend is running and accessible
+Any platform that supports Node.js 18+ and the `next build && next start` command will work. Set `NEXT_PUBLIC_API_BASE_URL` to point at your backend instance.
 
-### Tokens not persisting across refreshes
-- Browser localStorage must be enabled
-- Check that Providers component is rendered
+---
 
-## Further Enhancements
+## Relation to the Backend
 
-- [ ] React Query/SWR for automatic cache invalidation
-- [ ] Server-side auth with cookies (httpOnly)
-- [ ] Advanced transaction filtering
-- [ ] Dark/light theme toggle
-- [ ] Performance optimization with React Suspense
+This repository is the frontend half of a two-repo project. The Go backend implements:
+
+- Double-entry bookkeeping (every money movement writes two balanced ledger entries)
+- Atomic PostgreSQL transactions with serializable isolation and automatic retry on contention
+- JWT authentication
+- A reconciliation endpoint that verifies stored account balances against raw ledger sums
+
+The frontend is intentionally thin. If you are here to study the financial logic, start with the [backend repo](https://github.com/PaulBabatuyi/double-entry-bank-Go).
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).

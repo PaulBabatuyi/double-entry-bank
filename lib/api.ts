@@ -16,6 +16,7 @@ import type {
 
 /**
  * Make an authenticated API request
+ * Uses relative paths which are rewritten to the backend by Next.js
  */
 export async function request<T>(
   endpoint: string,
@@ -37,7 +38,8 @@ export async function request<T>(
 
   let response: Response;
   try {
-    response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    // Use relative path - Next.js will rewrite to backend via rewrites config
+    response = await fetch(endpoint, {
       cache: "no-store",
       ...options,
       headers,
@@ -45,7 +47,7 @@ export async function request<T>(
   } catch (error) {
     const reason =
       error && error instanceof Error ? error.message : "request failed";
-    throw new Error(`Request to ${API_BASE_URL}${endpoint} failed: ${reason}`);
+    throw new Error(`Request to ${endpoint} failed: ${reason}`);
   }
 
   // Handle 401: if the user already has a session token, it has expired

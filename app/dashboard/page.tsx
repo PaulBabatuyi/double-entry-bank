@@ -14,10 +14,8 @@ import { Header } from "@/components/dashboard/Header";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { AccountsList } from "@/components/dashboard/AccountsList";
 import { TransactionHistory } from "@/components/dashboard/TransactionHistory";
+import { FunctionForms } from "@/components/dashboard/FunctionForms";
 import { CreateAccountModal } from "@/components/dashboard/CreateAccountModal";
-import { DepositForm } from "@/components/dashboard/DepositForm";
-import { WithdrawForm } from "@/components/dashboard/WithdrawForm";
-import { TransferForm } from "@/components/dashboard/TransferForm";
 import type { Entry, Account } from "@/lib/types";
 
 export default function DashboardPage() {
@@ -165,30 +163,24 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white flex flex-col">
       <Header />
 
-      <div className="container mx-auto px-6 py-8 flex-1">
+      <div className="container mx-auto px-4 md:px-6 py-6 md:py-8 flex-1 space-y-3 sm:space-y-6 md:space-y-8">
+        {/* Dashboard Stats - Top Section */}
         <DashboardStats transactionCount={entries.length} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content - Left Side */}
-          <div className="lg:col-span-2 space-y-6">
-            <AccountsList
-              onReconcile={handleReconcile}
-              onOpenCreateModal={() => setIsCreateModalOpen(true)}
-            />
+        {/* My Accounts Section */}
+        <AccountsList
+          onReconcile={handleReconcile}
+          onOpenCreateModal={() => setIsCreateModalOpen(true)}
+        />
 
-            <TransactionHistory
-              entries={entries}
-              isLoading={isLoadingTransactions}
-            />
-          </div>
+        {/* Function Forms Section - Deposit/Withdraw/Transfer */}
+        <FunctionForms onSuccess={handleRefreshAfterMutation} />
 
-          {/* Forms - Right Side */}
-          <div className="space-y-6">
-            <DepositForm onSuccess={handleRefreshAfterMutation} />
-            <WithdrawForm onSuccess={handleRefreshAfterMutation} />
-            <TransferForm onSuccess={handleRefreshAfterMutation} />
-          </div>
-        </div>
+        {/* Transaction History - Full Width at Bottom */}
+        <TransactionHistory
+          entries={entries}
+          isLoading={isLoadingTransactions}
+        />
       </div>
 
       <CreateAccountModal
@@ -198,28 +190,48 @@ export default function DashboardPage() {
       />
 
       {/* Footer */}
-      <footer className="container mx-auto px-6 py-8 text-center text-sm text-gray-300 border-t border-white/10 mt-auto">
-        <p>
-          Learn the backend API in Swagger:
-          <a
-            href={`${getAPIBaseURL()}/swagger/index.html`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-300 hover:text-blue-200 underline ml-2"
-          >
-            Open API Docs
-          </a>
-        </p>
-        <p className="mt-2 text-gray-500">
-          <a
-            href={`${getAPIBaseURL()}/health`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-400 hover:text-gray-300 underline"
-          >
-            Health Check
-          </a>
-        </p>
+      <footer className="container mx-auto px-4 md:px-6 py-6 md:py-8 text-center text-xs md:text-sm text-gray-300 border-t border-white/10 mt-auto">
+        <div className="space-y-3">
+          {/* API Links */}
+          <p className="break-words">
+            Learn the backend API in Swagger:
+            <a
+              href={`${getAPIBaseURL()}/swagger/index.html`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-300 hover:text-blue-200 underline ml-1 md:ml-2 inline-block"
+            >
+              Open API Docs
+            </a>
+            <span className="text-gray-600"> • </span>
+            <a
+              href={`${getAPIBaseURL()}/health`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-green-300 hover:text-green-200 underline"
+            >
+              Health Check
+            </a>
+          </p>
+
+          {/* GitHub Link */}
+          <p>
+            <a
+              href="https://github.com/paulbabatuyi/double-entry-bank"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-2 text-gray-300 hover:text-white transition group"
+            >
+              <i className="fab fa-github text-lg group-hover:scale-110 transition"></i>
+              <span>View on GitHub</span>
+            </a>
+          </p>
+
+          {/* Copyright */}
+          <p className="text-gray-500 text-xs">
+            © {new Date().getFullYear()} Paul Babatuyi. All rights reserved.
+          </p>
+        </div>
       </footer>
     </div>
   );

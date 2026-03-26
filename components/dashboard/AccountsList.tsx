@@ -33,15 +33,15 @@ export function AccountsList({
 
   return (
     <div className="glass rounded-xl p-4 md:p-6 border border-white/20">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4 md:mb-6">
+      <div className="flex flex-row justify-between items-center gap-2 sm:gap-4 mb-4 md:mb-6">
         <h2 className="text-lg md:text-xl font-bold">
           <i className="fas fa-wallet mr-2 text-purple-400"></i>My Accounts
         </h2>
         <button
           onClick={onOpenCreateModal}
-          className="bg-purple-500 hover:bg-purple-600 px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm transition whitespace-nowrap w-full sm:w-auto"
+          className="bg-purple-500 hover:bg-purple-600 px-2 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm transition whitespace-nowrap flex-shrink-0"
         >
-          <i className="fas fa-plus mr-2"></i>New Account
+          <i className="fas fa-plus mr-1"></i>New Account
         </button>
       </div>
 
@@ -58,27 +58,27 @@ export function AccountsList({
             {displayedAccounts.map((account: Account) => (
               <div
                 key={account.id}
-                className="account-card glass rounded-xl p-3 md:p-5 flex flex-col sm:flex-row justify-between sm:items-center gap-3 sm:gap-4 border border-white/20 hover:border-purple-400/50 transition"
+                className="account-card glass rounded-lg p-2 md:p-3 flex flex-col sm:flex-row justify-between sm:items-center gap-1 sm:gap-2 border border-white/20 bg-white/5 hover:bg-white/10 transition"
               >
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <i className="fas fa-wallet text-purple-400 flex-shrink-0"></i>
-                    <h3 className="font-bold text-base md:text-lg truncate">
+                  <div className="flex items-center space-x-1.5 mb-1">
+                    <i className="fas fa-wallet text-purple-400 flex-shrink-0 text-xs md:text-sm"></i>
+                    <h3 className="font-bold text-xs md:text-sm truncate">
                       {account.name}
                     </h3>
                   </div>
-                  <p className="text-xs md:text-sm text-gray-400 mb-2 break-all">
+                  <p className="text-xs text-gray-400 break-all">
                     ID: {truncate(account.id)}
                   </p>
                   <button
                     onClick={() => onReconcile(account.id, account.name)}
-                    className="text-xs text-blue-300 hover:text-blue-200 transition font-medium"
+                    className="text-xs text-blue-300 hover:text-blue-200 transition font-medium mt-0.5"
                   >
                     Reconcile
                   </button>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <p className="text-xl md:text-2xl font-bold text-green-400">
+                  <p className="text-xs md:text-sm font-bold text-green-400">
                     {formatCurrency(account.balance)}
                   </p>
                   <p className="text-xs text-gray-400">{account.currency}</p>

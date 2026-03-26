@@ -223,7 +223,28 @@ export default function DashboardPage() {
               className="inline-flex items-center space-x-2 text-gray-300 hover:text-white transition group"
             >
               <i className="fab fa-github text-lg group-hover:scale-110 transition"></i>
-              <span>View on GitHub</span>
+              <span>Frontend on GitHub</span>
+            </a>
+          </p>
+
+          {/* Portfolio & Backend Links */}
+          <p className="space-x-2">
+            <a
+              href="https://paulbabatuyi.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-300 hover:text-blue-200 underline inline-block"
+            >
+              Portfolio
+            </a>
+            <span className="text-gray-600">•</span>
+            <a
+              href="https://github.com/PaulBabatuyi/double-entry-bank-Go"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-300 hover:text-blue-200 underline inline-block"
+            >
+              Backend API
             </a>
           </p>
 

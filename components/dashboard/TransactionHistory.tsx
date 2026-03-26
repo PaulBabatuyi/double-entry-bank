@@ -54,24 +54,24 @@ export function TransactionHistory({
             {displayedEntries.map((entry: Entry) => (
               <div
                 key={entry.id}
-                className="transaction-item glass rounded-lg p-3 md:p-4 flex flex-col sm:flex-row justify-between sm:items-center gap-2 sm:gap-4 border border-white/20 bg-white/5 hover:bg-white/10 transition"
+                className="transaction-item glass rounded-lg p-2 md:p-3 flex flex-col sm:flex-row justify-between sm:items-center gap-1 sm:gap-2 border border-white/20 bg-white/5 hover:bg-white/10 transition"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm md:text-base text-gray-300 break-words">
+                  <p className="text-xs md:text-sm text-gray-300 break-words">
                     {entry.description}
                   </p>
-                  <p className="text-xs md:text-sm text-gray-400 font-mono tracking-tight">
+                  <p className="text-xs text-gray-400 font-mono tracking-tight">
                     {formatDate(entry.created_at)}
                   </p>
                 </div>
                 <div className="text-right flex-shrink-0">
                   {parseFloat(entry.debit) > 0 && (
-                    <p className="text-sm md:text-base text-red-400 font-semibold">
+                    <p className="text-xs md:text-sm text-red-400 font-semibold">
                       -{formatCurrency(entry.debit)}
                     </p>
                   )}
                   {parseFloat(entry.credit) > 0 && (
-                    <p className="text-sm md:text-base text-green-400 font-semibold">
+                    <p className="text-xs md:text-sm text-green-400 font-semibold">
                       +{formatCurrency(entry.credit)}
                     </p>
                   )}

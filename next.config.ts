@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
       process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
     return {
       beforeFiles: [
-        // Proxy all API calls to Go backend
+        // Proxy authentication endpoints
         {
           source: "/register",
           destination: `${apiBaseUrl}/register`,
@@ -15,14 +15,21 @@ const nextConfig: NextConfig = {
           source: "/login",
           destination: `${apiBaseUrl}/login`,
         },
+        // Proxy accounts endpoints (both /accounts and /accounts/*)
+        {
+          source: "/accounts",
+          destination: `${apiBaseUrl}/accounts`,
+        },
         {
           source: "/accounts/:path*",
           destination: `${apiBaseUrl}/accounts/:path*`,
         },
+        // Proxy transfer endpoints
         {
           source: "/transfers",
           destination: `${apiBaseUrl}/transfers`,
         },
+        // Proxy transaction endpoints
         {
           source: "/transactions/:path*",
           destination: `${apiBaseUrl}/transactions/:path*`,

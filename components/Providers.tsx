@@ -10,10 +10,9 @@ import { useAuthStore } from "@/lib/store/authStore";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const hydrate = useAuthStore((state) => state.hydrate);
-  const isHydrated = useAuthStore((state) => state.isHydrated);
 
   useEffect(() => {
-    // Hydrate auth store from localStorage on mount
+    // Hydrate auth store from localStorage on mount (client-side only)
     hydrate();
 
     // Listen for auth logout events (e.g., from 401 responses)
@@ -25,12 +24,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("auth:logout", handleLogout);
   }, [hydrate]);
 
-  // Don't render until hydration is complete
-  if (!isHydrated) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900" />
-    );
-  }
-
+  // Always render children - hydration happens in useEffect above
+  // The page component will handle displaying loading state if needed
   return <>{children}</>;
 }

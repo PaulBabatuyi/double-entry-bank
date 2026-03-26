@@ -4,17 +4,17 @@
  */
 
 // API Base URL resolution
-// Uses VITE_API_BASE_URL environment variable in production
+// Uses NEXT_PUBLIC_API_BASE_URL environment variable in production
 // Falls back to same-origin or defaults to Render backend
 export function getAPIBaseURL(): string {
-  // In production/Vercel, use environment variable
-  if (typeof window !== "undefined" && process.env.VITE_API_BASE_URL) {
-    return process.env.VITE_API_BASE_URL;
+  // In production/Vercel, use environment variable (client-side)
+  if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_API_BASE_URL) {
+    return process.env.NEXT_PUBLIC_API_BASE_URL;
   }
 
   // If running in Node (SSR), use env var if available
-  if (process.env.VITE_API_BASE_URL) {
-    return process.env.VITE_API_BASE_URL;
+  if (process.env.NEXT_PUBLIC_API_BASE_URL) {
+    return process.env.NEXT_PUBLIC_API_BASE_URL;
   }
 
   // In browser, use same-origin by default

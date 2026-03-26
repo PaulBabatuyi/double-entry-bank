@@ -23,7 +23,7 @@ cp .env.local.example .env.local
 
 For local development (backend on localhost:8080):
 ```
-VITE_API_BASE_URL=http://localhost:8080
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
 ```
 
 ```
@@ -130,7 +130,7 @@ middleware.ts              # Auth redirect middleware
 
 ### Environment Configuration
 - **Before**: Hard-coded URL resolution in config.js
-- **After**: Environment variable `VITE_API_BASE_URL`
+- **After**: Environment variable `NEXT_PUBLIC_API_BASE_URL`
 
 ## Authentication Flow
 
@@ -161,7 +161,7 @@ The API client automatically:
 
 1. Push code to GitHub
 2. Connect repo to Vercel
-3. Set environment variable: `VITE_API_BASE_URL=....`
+3. Set environment variable: `NEXT_PUBLIC_API_BASE_URL=....`
 4. Deploy
 
 ## Troubleshooting
@@ -172,7 +172,7 @@ yarn type-check
 ```
 
 ### API calls fail (CORS or 404)
-- Check `VITE_API_BASE_URL` matches backend URL
+- Check `NEXT_PUBLIC_API_BASE_URL` matches backend URL
 - Ensure backend is running and accessible
 
 ### Tokens not persisting across refreshes

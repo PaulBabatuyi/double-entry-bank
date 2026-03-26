@@ -1,11 +1,21 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import { Toast } from "@/components/Toast";
 
 export const metadata: Metadata = {
-  title: "Double-Entry Bank Ledger",
-  description: "Production-grade double-entry bookkeeping system",
+  title: "Double-Entry Bank Ledger | Professional Banking System",
+  description:
+    "Production-grade double-entry bookkeeping system with real-time account management, transfers, deposits, and comprehensive transaction tracking. Secure, responsive, and mobile-friendly financial management.",
+  icons: {
+    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='serif'>💲</text></svg>",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1.0,
+  maximumScale: 5.0,
 };
 
 export default function RootLayout({
@@ -14,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className="h-full antialiased" data-scroll-behavior="smooth">
       <head>
         <link
           rel="stylesheet"

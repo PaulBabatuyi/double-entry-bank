@@ -2,7 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   rewrites: async () => {
-    const apiBaseUrl = process.env.VITE_API_BASE_URL || "http://localhost:8080";
+    const apiBaseUrl =
+      process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
     return {
       beforeFiles: [
         // Proxy swagger docs to Go backend
